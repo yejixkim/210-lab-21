@@ -1,33 +1,68 @@
 // COMSC 210 | Lab 21 | Yeji Kim
 
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
-const int MIN_NR = 10, MAX_NR = 99, MIN_LS = 5, MAX_LS = 20;
+const int MIN_LS = 5, MAX_LS = 20;
+const int SIZE = 15;
 
-class DoublyLinkedList {
+class Goat {
 private:
-    struct Node {
-        int data;
-        Node* prev;
-        Node* next;
-        Node(int val, Node* p = nullptr, Node* n = nullptr) {
-            data = val; 
-            prev = p;
-            next = n;
-        }
+    int age;
+    string name;
+    string color;
+    
+    //15 element names array
+    string names[SIZE] = {"Billy", "Nanny", "Gruff", "Bucky", "Daisy", 
+        "Molly", "Ginger", "Coco", "Luna", "Bella", 
+        "Max", "Charlie", "Rocky", "Shadow", "Smokey"
     };
 
-    Node* head;
-    Node* tail;
+    //15 element colors array
+    string colors[SIZE] = {"White", "Black", "Brown", "Gray", "Spotted",
+        "Golden", "Cream", "Red", "Blue", "Green",
+        "Yellow", "Purple", "Pink", "Silver", "Bronze"
+    };
 
 public:
-    // constructor
-    DoublyLinkedList() { head = nullptr; tail = nullptr; }
+    // default constructor
+    Goat() {
+        age = rand() % 20 + 1;
+        name = names[rand() % SIZE];
+        color = colors[rand() % SIZE];
+    }
 
-    void push_back(int value) {
-        Node* newNode = new Node(value);
-        if (!tail)  // if there's no tail, the list is empty
+    // parameterized constructor
+    Goat(int a, string n, string c) {
+        age = a;
+        name = n;
+        color = c;
+    }
+
+    void print() const {
+        cout << name << " (" << color << ", " << age << ")" << endl;
+    }
+
+    class DoublyLinkedList {
+    private:
+        struct Node {
+            Goat data;
+            Node* prev;
+            Node* next;
+
+
+    // getter functions
+    int getAge() const { return age; }
+    string getName() const { return name; }
+    string getColor() const { return color; }
+
+    // setter functions
+    void setAge(int a) { age = a; }
+    void setName(string n) { name = n; }
+    void setColor(string c) { color = c; }
+};
             head = tail = newNode;
         else {
             tail->next = newNode;
