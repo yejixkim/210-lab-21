@@ -44,145 +44,117 @@ public:
     void print() const {
         cout << name << " (" << color << ", " << age << ")" << endl;
     }
+};
 
-    class DoublyLinkedList {
+class DoublyLinkedList {
     private:
         struct Node {
             Goat data;
             Node* prev;
             Node* next;
 
+            Node(Goat val, Node* p = nullptr, Node* n = nullptr) {
+                data = val;
+                prev = p;
+                next = n;
+            }
+        };
 
-    // getter functions
-    int getAge() const { return age; }
-    string getName() const { return name; }
-    string getColor() const { return color; }
+        Node* head;
+        Node* tail;
 
-    // setter functions
-    void setAge(int a) { age = a; }
-    void setName(string n) { name = n; }
-    void setColor(string c) { color = c; }
-};
-            head = tail = newNode;
-        else {
-            tail->next = newNode;
-            newNode->prev = tail;
-            tail = newNode;
-        }
-    }
-
-    void push_front(int value) {
-        Node* newNode = new Node(value);
-        if (!head)  // if there's no head, the list is empty
-            head = tail = newNode;
-        else {
-            newNode->next = head;
-            head->prev = newNode;
-            head = newNode;
-        }
-    }
-
-    void insert_after(int value, int position) {
-        if (position < 0) {
-            cout << "Position must be >= 0." << endl;
-            return;
+    public:
+        // constructor
+        DoublyLinkedList() {
+            head = nullptr;
+            tail = nullptr;
         }
 
-        Node* newNode = new Node(value);
-        if (!head) {
-            head = tail = newNode;
-            return;
+        void push_back(Goat value) {
+            Node* newNode = new Node(value);
+
+            if (!tail)
+                head = tail = newNode;
+            else {
+                tail->next = newNode;
+                newNode->prev = tail;
+                tail = newNode;
+            }
         }
 
-        Node* temp = head;
-        for (int i = 0; i < position && temp; ++i)
-            temp = temp->next;
+        void push_front(Goat value) {
+            Node* newNode = new Node(value);
 
-        if (!temp) {
-            cout << "Position exceeds list size. Node not inserted.\n";
-            delete newNode;
-            return;
+            if (!head)
+                head = tail = newNode;
+            else {
+                newNode->next = head;
+                head->prev = newNode;
+                head = newNode;
+            }
         }
 
-        newNode->next = temp->next;
-        newNode->prev = temp;
-        if (temp->next)
-            temp->next->prev = newNode;
-        else
-            tail = newNode; // Inserting at the end
-        temp->next = newNode;
-    }
+        void print() {
+            Node* current = head;
+            
+            if (!current) {
+                cout << "List is empty." << endl;
+                return;
+            }
 
-    void delete_node(int value) {
-        if (!head) return; // Empty list
+            cout << "Forward: " << endl;
 
-        Node* temp = head;
-        while (temp && temp->data != value)
-            temp = temp->next;
+            while (current) {
+                current->data.print();
+                current = current->next;
+            }
 
-        if (!temp) return; // Value not found
-
-        if (temp->prev) {
-            temp->prev->next = temp->next;
-        } else {
-            head = temp->next; // Deleting the head
+            cout << endl;
         }
 
-        if (temp->next) {
-            temp->next->prev = temp->prev;
-        } else {
-            tail = temp->prev; // Deleting the tail
+        void print_reverse() {
+            Node* current = tail;
+
+            if (!current) {
+                cout << "List is empty." << endl;
+                return;
+            }
+
+            cout << "Reverse: " << endl;
+
+            while (current) {
+                current->data.print();
+                current = current->prev;
+            }
+
+            cout << endl;
         }
 
-        delete temp;
-    }
-
-    void print() {
-        Node* current = head;
-        if (!current) return;
-        while (current) {
-            cout << current->data << " ";
-            current = current->next;
+        ~DoublyLinkedList() {
+            while (head) {
+                Node* temp = head;
+                head = head->next;
+                delete temp;
+            }
         }
-        cout << endl;
-    }
-
-    void print_reverse() {
-        Node* current = tail;
-        if (!current) return;
-        while (current) {
-            cout << current->data << " ";
-            current = current->prev;
-        }
-        cout << endl;
-    }
-
-    ~DoublyLinkedList() {
-        while (head) {
-            Node* temp = head;
-            head = head->next;
-            delete temp;
-        }
-    }
 };
 
 // Driver program
 int main() {
+    srand(time(0));
+
     DoublyLinkedList list;
+
     int size = rand() % (MAX_LS-MIN_LS+1) + MIN_LS;
 
-    for (int i = 0; i < size; ++i)
-        list.push_back(rand() % (MAX_NR-MIN_NR+1) + MIN_NR);
-    cout << "List forward: ";
+    for (int i = 0; i < size; ++i) {
+        Goat goat;
+        list.push_back(goat);
+    }
+    
     list.print();
 
-    cout << "List backward: ";
     list.print_reverse();
-
-    cout << "Deleting list, then trying to print.\n";
-    list.~DoublyLinkedList();
-    cout << "List forward: ";
-    list.print();
 
     return 0;
 }
